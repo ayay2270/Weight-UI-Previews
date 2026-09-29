@@ -1,0 +1,42 @@
+# Dependencies and generated builds
+node_modules/
+dist/
+coverage/
+
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local state, caches, logs, and temporary files
+.cache/
+.vite/
+.npm/
+.turbo/
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+temp/
+tmp/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local design documentation, screenshots, and machine-specific verification
+DESIGN-NOTES.md
+screenshots/
+verification.json
+interaction-verification.json
+source-integrity.json
