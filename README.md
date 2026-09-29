@@ -13,7 +13,7 @@ npm run dev
 
 Open the local URL printed by Vite. Stop the server with Ctrl+C.
 
-For the published gallery, open https://ayay2270.github.io/Weight-UI-Previews/. Each concept is available at `/preview/1` through `/preview/6`. On another machine, install dependencies with `npm ci` before starting Vite. `npm run build` checks TypeScript and creates a local production build. GitHub Actions builds with the required Pages base path and deploys from `main`.
+For the published gallery, open https://ayay2270.github.io/Weight-UI-Previews/. Each concept is available at `/preview/1` through `/preview/6`. On another machine, install dependencies with `npm ci` before starting Vite. `npm run build` checks TypeScript, creates a local production build and generates direct-entry pages for the six concepts and their application screens. GitHub Actions builds with the required Pages base path and deploys from `main`.
 
 ## Concepts
 
@@ -60,7 +60,7 @@ The existing Weight Data Manager repository and production site were left unchan
 - `public/lenovo-logo.png` — unchanged repository logo.
 - `public/import-template.xlsx` — copied repository template.
 - `index.html`, `package.json`, `package-lock.json`, `tsconfig.json`, `vite.config.ts` — isolated preview configuration.
-- `.github/workflows/deploy-pages.yml` and `public/404.html` — Pages build/deployment and direct-route fallback.
+- `.github/workflows/deploy-pages.yml`, `public/404.html` and `scripts/create-pages-routes.mjs` — Pages deployment and direct route handling.
 - `.gitignore` — excludes local-only materials, build output and sensitive local environment files.
 
 ## Verification

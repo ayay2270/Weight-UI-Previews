@@ -6,6 +6,7 @@ import { concepts, initialRecords, initialProjects, statuses, levels, sources, w
 import './styles.css'
 
 const appBase = import.meta.env.BASE_URL.replace(/\/$/, '')
+function appPathname() { return appBase && location.pathname.startsWith(`${appBase}/`) ? location.pathname.slice(appBase.length) : location.pathname }
 type Page = 'dashboard' | 'weight-data' | 'projects' | 'import-export' | 'settings'
 const pages: { key: Page; label: string; icon: typeof Scale }[] = [ { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard }, { key: 'projects', label: 'Projects', icon: FolderKanban }, { key: 'weight-data', label: 'Weight Data', icon: Scale }, { key: 'import-export', label: 'Import / Export', icon: ArrowLeftRight }, { key: 'settings', label: 'Settings', icon: Settings } ]
 function Badge({ status }: { status: string }) { return <span className={`badge ${statusClass(status)}`}><span aria-hidden="true" className="badge-dot" />{status}</span> }
@@ -17,7 +18,7 @@ function download(content: string, name: string, type = 'application/json') { co
 function Gallery() { return <div className="gallery"><header><Brand /><span className="preview-label">TEMPORARY UI EXPLORATION</span></header><main><div className="gallery-intro"><p className="eyebrow">SAME DATABASE. SIX WORKSPACES.</p><h1>UI Preview Gallery</h1><p>Explore six directions for engineering measurement, review and project oversight.</p><div className="gallery-notes"><span><ShieldCheck size={16} /> Isolated preview environment</span><span><Database size={16} /> Shared repository demo data</span><span>UI/UX Pro Max only</span></div></div><div className="concept-grid">{concepts.map(c => <a className={`concept-card mini-${c.id}`} href={`${appBase}/preview/${c.id}`} key={c.id}><div className="concept-card-head"><span>CONCEPT 0{c.id}</span><ChevronRight size={18}/></div><div className="miniature" aria-hidden="true"><div className="mini-nav"/><div className="mini-body"><div className="mini-kpis"><i/><i/><i/><i/></div><div className="mini-panels"><i/><i/></div><div className="mini-rows"><i/><i/><i/><i/></div></div></div><p className="eyebrow">{c.tag}</p><h2>{c.name}</h2><p>{c.description}</p><footer><span>{c.density} density</span><span>5 screens</span></footer></a>)}</div><p className="gallery-foot">Preview interactions use temporary in-memory data. Refresh to restore the initial dataset. No connection to production storage.</p></main></div> }
 
 function App() {
-  const route = location.pathname.match(/^\/preview\/([1-6])(?:\/([^/]+))?\/?$/)
+  const route = appPathname().match(/^\/preview\/([1-6])(?:\/([^/]+))?\/?$/)
   const concept = Number(route?.[1] || 0)
   const [page, setPage] = useState<Page>((pages.find(p => p.key === route?.[2])?.key) || (concept === 2 || concept === 5 ? 'weight-data' : 'dashboard'))
   const [records, setRecords] = useState<RecordRow[]>(() => structuredClone(initialRecords))
@@ -32,7 +33,7 @@ function App() {
   const [reviewComment, setReviewComment] = useState(''); const [reviewer, setReviewer] = useState('S. Huang')
   const [ioScope, setIoScope] = useState('all'); const [format, setFormat] = useState('xlsx'); const [file, setFile] = useState<File | null>(null); const [importMode, setImportMode] = useState('Draft'); const [savedView, setSavedView] = useState<{ query: string; project: string; status: string; level: string; source: string; phase: string } | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
-  useEffect(() => { const fn = () => { const m = location.pathname.match(/\/preview\/[1-6]\/([^/]+)/); setPage(pages.find(p => p.key === m?.[1])?.key || 'dashboard') }; addEventListener('popstate', fn); return () => removeEventListener('popstate', fn) }, [])
+  useEffect(() => { const fn = () => { const m = appPathname().match(/\/preview\/[1-6]\/([^/]+)/); setPage(pages.find(p => p.key === m?.[1])?.key || 'dashboard') }; addEventListener('popstate', fn); return () => removeEventListener('popstate', fn) }, [])
   useEffect(() => { setRowPage(1) }, [query, project, status, level, source, phase])
   useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(''), 4500); return () => clearTimeout(t) }, [toast])
   function navigate(p: Page) { if(p === 'projects') { setStatus(''); setQuery('') } setPage(p); history.pushState({}, '', `${appBase}/preview/${concept}/${p}`); setDrawer(false) }
